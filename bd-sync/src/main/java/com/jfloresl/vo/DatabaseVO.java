@@ -9,6 +9,16 @@ public class DatabaseVO {
     public String user;
     public String pass;
 
+    public DatabaseVO(String name, String host, String port, String service, String schema, String user, String pass) {
+        this.name = name;
+        this.host = host;
+        this.port = port;
+        this.service = service;
+        this.schema = schema;
+        this.user = user;
+        this.pass = pass;
+    }
+
     @Override
     public String toString() {
         return "DatabaseVO{" +

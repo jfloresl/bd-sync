@@ -26,10 +26,7 @@ public class Main {
                 databaseVO[i] = PropertiesReader.read(d);
                 i++;
             }
-            //System.out.println("databaseVO[0]:"+databaseVO[0]);
-
-            Comparer.getData(databaseVO[0]);
-
+            System.out.println(Comparer.getData(databaseVO[0]));
 
         } else {
             // File doesn't exist, create folder and file
