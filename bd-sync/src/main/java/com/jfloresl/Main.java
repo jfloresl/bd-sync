@@ -26,9 +26,9 @@ public class Main {
                 databaseVO[i] = PropertiesReader.read(d);
                 i++;
             }
-            System.out.println("databaseVO[0]:"+databaseVO[0]);
+            //System.out.println("databaseVO[0]:"+databaseVO[0]);
 
-            Comparer.comparer(databaseVO[0],databaseVO[1]);
+            Comparer.getData(databaseVO[0]);
 
 
         } else {
