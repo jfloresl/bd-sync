@@ -3,13 +3,13 @@ package com.bdsync.vo;
 public class ColumnVO {
     String name;
     String tipo;
-    String tamaño;
+    String size;
     String nullable;
 
-    public ColumnVO(String name, String tipo, String tamaño, String nullable) {
+    public ColumnVO(String name, String tipo, String size, String nullable) {
         this.name = name;
         this.tipo = tipo;
-        this.tamaño = tamaño;
+        this.size = size;
         this.nullable = nullable;
     }
 
@@ -29,19 +29,19 @@ public class ColumnVO {
         this.tipo = tipo;
     }
 
-    public String getTamaño() {
-        return tamaño;
-    }
-
-    public void setTamaño(String tamaño) {
-        this.tamaño = tamaño;
-    }
-
     public String getNullable() {
         return nullable;
     }
 
     public void setNullable(String nullable) {
         this.nullable = nullable;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 }

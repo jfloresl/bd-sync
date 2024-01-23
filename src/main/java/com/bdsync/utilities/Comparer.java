@@ -3,6 +3,9 @@ package com.bdsync.utilities;
 import com.bdsync.vo.ColumnVO;
 import com.bdsync.vo.DatabaseVO;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +32,7 @@ public class Comparer {
                 tablasLista.add(tablasDb1.getString(1));
             }
             System.out.println("lista de tablas:"+tablasLista);
+            List<String> tablasLista2 = new ArrayList<>(tablasLista.subList(0, 2)); //temp
 
             for(String t: tablasLista){
                 ResultSet rs4=stmt1.executeQuery("select COLUMN_NAME,DATA_TYPE,DATA_LENGTH,NULLABLE from all_tab_columns WHERE OWNER='"+d1.schema+"' AND TABLE_NAME='"+t+"'");
@@ -66,5 +70,91 @@ public class Comparer {
             System.out.println(e);
             return null;
         }
+    }
+
+    public static void comparar(Map<String, List<ColumnVO>> db1, Map<String, List<ColumnVO>> db2, String nameDb1, String nameDb2) {
+        // Iterate over the keys of db1
+
+        List<String> tablasNoExistEnDb1=new ArrayList<>();
+        Map<String, List<ColumnVO>> columnasNoExistEnDb1=new HashMap<>();
+        List<String> tablasNoExistEnDb2=new ArrayList<>();
+        Map<String, List<ColumnVO>> columnasNoExistEnDb2=new HashMap<>();
+        for (String key : db1.keySet()) {
+            // Check if the key is present in db2
+            if (!db2.containsKey(key)) {
+                tablasNoExistEnDb2.add(key);
+                //System.out.println("Key " + key + " is present in"+nameDb1+" but not in "+nameDb2);
+            }else{
+                List<ColumnVO> listaColumnas = new ArrayList<>();
+                for(ColumnVO c: db1.get(key)){
+                   if(!db2.get(key).contains(c)){
+                       listaColumnas.add(c);
+                   }
+                }
+                columnasNoExistEnDb2.put(key,listaColumnas);
+
+            }
+        }
+        //System.out.println("======");
+        // Iterate over the keys of db2
+        for (String key : db2.keySet()) {
+            // Check if the key is present in db1
+            if (!db1.containsKey(key)) {
+                tablasNoExistEnDb1.add(key);
+                //System.out.println("Key " + key + " is present in "+nameDb2+" but not in "+nameDb1);
+            }else{
+                List<ColumnVO> listaColumnas2 = new ArrayList<>();
+                for(ColumnVO c: db1.get(key)){
+                    if(!db1.get(key).contains(c)){
+                        listaColumnas2.add(c);
+                    }
+                }
+                columnasNoExistEnDb1.put(key,listaColumnas2);
+
+            }
+        }
+
+
+        String filePath = "c:\\bd-sync\\db1.txt";
+
+        try (FileWriter writer = new FileWriter(filePath)) {
+            for (String line : tablasNoExistEnDb1) {
+                writer.write(line);
+                writer.write(System.lineSeparator()); // Add a new line after each string
+            }
+
+            System.out.println("List written to file successfully!");
+        } catch (IOException e) {
+            System.out.println("Error writing list to file: " + e.getMessage());
+        }
+
+
+/*
+        String filePath = "c:\\bd-sync\\db1.txt";
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
+            // Iterate over the map entries and write them to the file
+            for (Map.Entry<String, List<ColumnVO>> entry : columnasNoExistEnDb2.entrySet()) {
+                String key = entry.getKey();
+                List<ColumnVO> values = entry.getValue();
+
+                // Write the key to the file
+                writer.println("Key: " + key);
+
+                // Write the values to the file
+                for (ColumnVO column : values) {
+                    writer.println("Column: " + column.getName());
+                }
+
+                // Add a separator between entries
+                writer.println("--------------------");
+            }
+
+            System.out.println("Map written to file successfully!");
+        } catch (IOException e) {
+            System.out.println("Error writing map to file: " + e.getMessage());
+        }
+
+*/
     }
 }

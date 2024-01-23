@@ -1,4 +1,4 @@
-package com.bdsync.utilities;
+package com.bdsync.vo;
 
 public class DatabaseVO {
     public String name;
@@ -17,6 +17,10 @@ public class DatabaseVO {
         this.schema = schema;
         this.user = user;
         this.pass = pass;
+    }
+
+    public DatabaseVO() {
+
     }
 
     @Override
