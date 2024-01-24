@@ -2,6 +2,7 @@ package com.bdsync.utilities;
 
 import com.bdsync.vo.ColumnVO;
 import com.bdsync.vo.DatabaseVO;
+import com.bdsync.database.Sql;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -79,6 +80,7 @@ public class Comparer {
         Map<String, List<ColumnVO>> columnasNoExistEnDb1=new HashMap<>();
         List<String> tablasNoExistEnDb2=new ArrayList<>();
         Map<String, List<ColumnVO>> columnasNoExistEnDb2=new HashMap<>();
+
         for (String key : db1.keySet()) {
             // Check if the key is present in db2
             if (!db2.containsKey(key)) {
@@ -104,7 +106,7 @@ public class Comparer {
                 //System.out.println("Key " + key + " is present in "+nameDb2+" but not in "+nameDb1);
             }else{
                 List<ColumnVO> listaColumnas2 = new ArrayList<>();
-                for(ColumnVO c: db1.get(key)){
+                for(ColumnVO c: db2.get(key)){
                     if(!db1.get(key).contains(c)){
                         listaColumnas2.add(c);
                     }
@@ -116,45 +118,19 @@ public class Comparer {
 
 
         String filePath = "c:\\bd-sync\\db1.txt";
+        Util.writeTables(tablasNoExistEnDb1,filePath);
 
-        try (FileWriter writer = new FileWriter(filePath)) {
-            for (String line : tablasNoExistEnDb1) {
-                writer.write(line);
-                writer.write(System.lineSeparator()); // Add a new line after each string
-            }
+        String filePath2 = "c:\\bd-sync\\db2.txt";
+        Util.writeTables(tablasNoExistEnDb2,filePath2);
 
-            System.out.println("List written to file successfully!");
-        } catch (IOException e) {
-            System.out.println("Error writing list to file: " + e.getMessage());
-        }
+        String filePath3 = "c:\\bd-sync\\db1Columns1.txt";
+        Util.writeTablesAndColumns(columnasNoExistEnDb1,filePath3);
 
+        String filePath4 = "c:\\bd-sync\\db1Columns2.txt";
+        Util.writeTablesAndColumns(columnasNoExistEnDb2,filePath4);
 
-/*
-        String filePath = "c:\\bd-sync\\db1.txt";
+        Sql.generateQueriesCreateTables(tablasNoExistEnDb1,db1);
+        //Sql.generateQueriesUpdateTables(tablasNoExistEnDb1,columnasNoExistEnDb1);
 
-        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
-            // Iterate over the map entries and write them to the file
-            for (Map.Entry<String, List<ColumnVO>> entry : columnasNoExistEnDb2.entrySet()) {
-                String key = entry.getKey();
-                List<ColumnVO> values = entry.getValue();
-
-                // Write the key to the file
-                writer.println("Key: " + key);
-
-                // Write the values to the file
-                for (ColumnVO column : values) {
-                    writer.println("Column: " + column.getName());
-                }
-
-                // Add a separator between entries
-                writer.println("--------------------");
-            }
-
-            System.out.println("Map written to file successfully!");
-        } catch (IOException e) {
-            System.out.println("Error writing map to file: " + e.getMessage());
-        }
-
-*/
     }
 }
