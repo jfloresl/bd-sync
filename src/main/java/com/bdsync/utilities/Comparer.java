@@ -129,7 +129,8 @@ public class Comparer {
         String filePath4 = "c:\\bd-sync\\db1Columns2.txt";
         Util.writeTablesAndColumns(columnasNoExistEnDb2,filePath4);
 
-        Sql.generateQueriesCreateTables(tablasNoExistEnDb1,db1);
+        Sql.generateQueriesCreateTables(tablasNoExistEnDb1,db2);
+        Sql.generateQueriesCreateTables(tablasNoExistEnDb2,db1);
         //Sql.generateQueriesUpdateTables(tablasNoExistEnDb1,columnasNoExistEnDb1);
 
     }
